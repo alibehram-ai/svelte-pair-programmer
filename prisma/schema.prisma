@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model CodeReview {
+  id        String        @id @default(cuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  language  String
+  filename  String?
+  content   String
+  status    ReviewStatus  @default(PENDING)
+  result    ReviewResult?
+}
+
+model ReviewResult {
+  id            String          @id @default(cuid())
+  createdAt     DateTime        @default(now())
+  summary       String
+  readability  Int
+  structure    Int
+  maintainability Int
+  codeReviewId String          @unique
+  codeReview   CodeReview      @relation(fields: [codeReviewId], references: [id], onDelete: Cascade)
+  comments     ReviewComment[]
+}
+
+model ReviewComment {
+  id            String       @id @default(cuid())
+  createdAt     DateTime     @default(now())
+  category      ReviewCategory
+  message       String
+  lineStart     Int?
+  lineEnd       Int?
+  reviewResultId String
+  reviewResult  ReviewResult @relation(fields: [reviewResultId], references: [id], onDelete: Cascade)
+}
+
+enum ReviewStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum ReviewCategory {
+  READABILITY
+  STRUCTURE
+  MAINTAINABILITY
+  BEST_PRACTICE
+}
