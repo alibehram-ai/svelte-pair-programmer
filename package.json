@@ -34,7 +34,9 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
+		"@libsql/client": "^0.17.0",
 		"@monaco-editor/loader": "^1.7.0",
+		"@prisma/adapter-libsql": "^7.4.2",
 		"@prisma/client": "^7.4.2",
 		"@tanstack/svelte-query": "^6.1.0",
 		"@trpc/client": "^11.12.0",
